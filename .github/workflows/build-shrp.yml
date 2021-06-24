@@ -25,10 +25,10 @@ jobs:
             sudo apt install python3
        - name: Download Requirements
          run: |
-              mkdir ~/bin
-              PATH=~/bin:$PATH
-              curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-              chmod a+x ~/bin/repo
+              mkdir /home/runner/work/recovery-builder/recovery-builder/bin
+              PATH=/home/runner/work/recovery-builder/recovery-builder/shrp/:$PATH
+              curl https://storage.googleapis.com/git-repo-downloads/repo > /home/runner/work/recovery-builder/recovery-builder/shrp/bin/repo
+              chmod a+x /home/runner/work/recovery-builder/recovery-builder/shrp/bin/repo
 
        - name: Get SHRP Sources
          run: |
