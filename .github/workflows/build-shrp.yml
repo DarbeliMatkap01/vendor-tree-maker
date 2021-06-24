@@ -26,9 +26,9 @@ jobs:
        - name: Download Requirements
          run: |
               mkdir /home/runner/work/recovery-builder/recovery-builder/bin
-              PATH=/home/runner/work/recovery-builder/recovery-builder/shrp/:$PATH
-              curl https://storage.googleapis.com/git-repo-downloads/repo > /home/runner/work/recovery-builder/recovery-builder/shrp/bin/repo
-              chmod a+x /home/runner/work/recovery-builder/recovery-builder/shrp/bin/repo
+              PATH=/home/runner/work/recovery-builder/recovery-builder/bin:$PATH
+              curl https://storage.googleapis.com/git-repo-downloads/repo > /home/runner/work/recovery-builder/recovery-builder/bin/repo
+              chmod a+x /home/runner/work/recovery-builder/recovery-builder/bin/repo
 
        - name: Get SHRP Sources
          run: |
