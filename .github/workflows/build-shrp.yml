@@ -1,0 +1,66 @@
+name: Building GSI..
+
+on:
+  watch:
+    types: [started]
+  
+env:
+  USER: Headache01
+  EMAIL: ismailduyan00@gmail.com
+  TREE: https://github.com/Headache01/GM8_sprout_shrp.git 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+       - name: Checkout
+         uses: actions/checkout@master
+           
+       - name: Initializing environment
+         run: |
+            sudo -E apt-get -qq update
+            sudo -E apt-get -qq install git openjdk-8-jdk wget
+            sudo apt install python3
+       - name: Download Requirements
+         run: |
+              mkdir ~/bin
+              PATH=~/bin:$PATH
+              curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+              chmod a+x ~/bin/repo
+
+       - name: Get SHRP Sources
+         run: |
+              mkdir shrp
+              cd shrp
+              git config --global user.name $USER
+              git config --global user.email $EMAIL
+              repo init --depth=1 -u git://github.com/SHRP/platform_manifest_twrp_omni.git -b v3_9.0
+              repo sync --force-sync -j6 -c
+       
+       - name: Get SHRP Tree
+         run: |
+              mkdir device/GM
+              cd device/GM
+              git clone $TREE
+              mv GM8_sprout_shrp GM8_sprout
+
+       - name: Build SHRP
+         run: |
+              cd /home/runner/work/recovery-builder/recovery-builder/shrp/
+              . build/envsetup.sh
+              lunch omni_GM8_sprout-eng
+              mka recoveryimage -j6
+
+       - name: Upload On Web
+         run: |
+              cd /home/runner/work/recovery-builder/recovery-builder/shrp/out/product/
+              ls
+              wget https://raw.githubusercontent.com/Mikubill/transfer/master/install.sh
+              chmod +x install.sh
+              ./install.sh
+              cd /home/runner/work/recovery-builder/recovery-builder/shrp/
+              git clone $TREE
+              mv GM8_sprout_shrp GM8_sprout
+       
