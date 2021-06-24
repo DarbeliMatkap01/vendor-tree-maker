@@ -23,18 +23,21 @@ jobs:
             sudo -E apt-get -qq update
             sudo -E apt-get -qq install git openjdk-8-jdk wget
             sudo apt install python3
+
        - name: Download Requirements
          run: |
+              cd /home/runner/work/recovery-builder/recovery-builder/
               mkdir ~/bin
               PATH=~/bin:$PATH
               curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
               chmod a+x ~/bin/repo
               echo "PATH=~/bin:$PATH" >> .bashrc
               source ~/.bashrc
+
        - name: Get SHRP Sources
          run: |
-              mkdir shrp
-              cd shrp
+              mkdir /home/runner/work/recovery-builder/recovery-builder/shrp
+              cd /home/runner/work/recovery-builder/recovery-builder/shrp
               git config --global user.name $USER
               git config --global user.email $EMAIL
               repo init --depth=1 -u git://github.com/SHRP/platform_manifest_twrp_omni.git -b v3_9.0
