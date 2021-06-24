@@ -26,6 +26,7 @@ jobs:
 
        - name: Download Requirements
          run: |
+              ls
               cd /home/runner/work/recovery-builder/recovery-builder/
               mkdir ~/bin
               PATH=~/bin:$PATH
