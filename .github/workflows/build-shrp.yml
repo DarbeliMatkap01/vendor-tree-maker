@@ -34,6 +34,7 @@ jobs:
               ls
               echo "PATH=~/bin:$PATH" >> .bashrc
               source ~/.bashrc
+              sudo apt-get install repo -y
 
        - name: Get SHRP Sources
          run: |
@@ -41,7 +42,7 @@ jobs:
               cd /home/runner/work/recovery-builder/recovery-builder/shrp
               git config --global user.name $USER
               git config --global user.email $EMAIL
-              repo init --depth=1 -u git://github.com/SHRP/platform_manifest_twrp_omni.git -b v3_9.0
+              repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-9.0
               repo sync --force-sync -j6 -c
        
        - name: Get SHRP Tree
