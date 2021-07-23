@@ -25,6 +25,7 @@ jobs:
 
        - name: Download Requirements
          run: |
+              cd
               mkdir ~/bin
               PATH=~/bin:$PATH
               export PATH=~/bin:$PATH
