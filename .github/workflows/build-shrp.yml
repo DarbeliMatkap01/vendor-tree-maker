@@ -33,7 +33,7 @@ jobs:
               PATH=~/bin:$PATH
               export PATH=~/bin:$PATH
               curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-              chmod a+x ~/bin/repo
+              chmod +x ~/bin/repo
               ls
               echo "PATH=~/bin:$PATH" >> .bashrc
               source ~/.bashrc
