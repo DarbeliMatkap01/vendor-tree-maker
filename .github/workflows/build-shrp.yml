@@ -1,4 +1,4 @@
-name: Building TWRP..
+name: VENDOR EXTRACT
 
 on:
   watch:
@@ -6,8 +6,9 @@ on:
   
 env:
   USER: Headache01
-  EMAIL: ismailduyan00@gmail.com
-  TREE: https://github.com/Headache01/GM8_sprout_shrp.git 
+  EMAIL: ismailduyan80@gmail.com
+  ROM: https://cdn-ota.azureedge.net/V14.0.6.0.TMOMIXM/miui_RUBYGlobal_V14.0.6.0.TMOMIXM_ce09b50573_13.0.zip
+  PROP: https://raw.githubusercontent.com/Headache01/android_device_xiaomi_ruby/lineage-21/proprietary-files.txt
 jobs:
   build:
     runs-on: ubuntu-18.04
@@ -26,52 +27,38 @@ jobs:
             sudo apt install python
             sudo apt install python-pip
 
-       - name: Download Requirements
+ - name: Get android_tools Sources
          run: |
-              cd
-              mkdir ~/bin
-              PATH=~/bin:$PATH
-              export PATH=~/bin:$PATH
-              curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-              chmod +x ~/bin/repo
-              ls
-              echo "PATH=~/bin:$PATH" >> .bashrc
-              source ~/.bashrc
-              sudo apt-get install repo -y
-              sudo apt install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
-
-
-       - name: Get SHRP Sources
-         run: |
-              mkdir /home/runner/work/recovery-builder/recovery-builder/shrp
-              cd /home/runner/work/recovery-builder/recovery-builder/shrp
-              git config --global user.name $USER
-              git config --global user.email $EMAIL
-              repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-9.0
-              repo sync --force-sync -j6 -c
+              git clone https://github.com/Headache01/android_tools
+              cd /home/runner/work/vendor-tree-maker/vendor-tree-maker/android_tools
+              ./setup.sh
+              
+              
        
-       - name: Get SHRP Tree
+       - name: Get ROM
          run: |
-              mkdir device/GM
-              cd device/GM
-              git clone $TREE
-              mv GM8_sprout_shrp GM8_sprout
+              mkdir rom
+              cd rom
+              wget $ROM > a.zip 
 
-       - name: Build SHRP
+       - name: Extract ROM and CREATE VENDOR TREE
          run: |
-              cd /home/runner/work/recovery-builder/recovery-builder/shrp/
-              . build/envsetup.sh
-              lunch omni_GM8_sprout-eng
-              mka recoveryimage -j6
+              cd ..
+              ./tools/rom_extract.sh rom/a.zip
+              mkdir working
+              cd working
+              wget $PROP
+              cd ..
+              ./tools/vendor_tree.sh dumps/a
+
 
        - name: Upload On Web
          run: |
-              cd /home/runner/work/recovery-builder/recovery-builder/shrp/out/product/
-              ls
+              sudo apt-get install zip
+              sudo apt install unzip
+              zip –r vendor.zip vendor
               wget https://raw.githubusercontent.com/Mikubill/transfer/master/install.sh
               chmod +x install.sh
               ./install.sh
-              cd /home/runner/work/recovery-builder/recovery-builder/shrp/
-              git clone $TREE
-              mv GM8_sprout_shrp GM8_sprout
+              ./transfer gof vendor.zip
        
