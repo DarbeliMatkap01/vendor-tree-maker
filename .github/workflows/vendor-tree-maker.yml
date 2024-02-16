@@ -27,7 +27,7 @@ jobs:
             sudo apt install python
             sudo apt install python-pip
 
- - name: Get android_tools Sources
+       - name: Get android_tools Sources
          run: |
               git clone https://github.com/Headache01/android_tools
               cd /home/runner/work/vendor-tree-maker/vendor-tree-maker/android_tools
